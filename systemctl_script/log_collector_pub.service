@@ -1,0 +1,21 @@
+[Unit]
+Description=Log Collector Publish Service.
+Wants=network.target
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/log_collector_v2/
+Environment=PATH=/opt/log_collector_v2/venv/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+Environment=MONGO_LOG=/data/log/mongod.log
+Environment=PYTHONPATH=/opt/log_collector_v2/venv/lib/python3.10/site-packages:/opt/log_collector_v2
+ExecStart=/opt/log_collector_v2/venv/bin/python /opt/log_collector_v2/log_collector_v2.py
+Restart=on-failure
+RestartSec=20s
+PIDFile=/var/run/log_collector_v2_pub.pid
+StandardOutput=file:/opt/log_collector_v2/log_collector_pub_run.log
+StandardError=file:/opt/log_collector_v2/log_collector_pub_error.log
+ExecStop=
+
+[Install]
+WantedBy=multi-user.target

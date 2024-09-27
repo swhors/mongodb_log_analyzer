@@ -1,0 +1,21 @@
+[Unit]
+Description=Log Collector Service.
+Wants=network.target
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/collector/
+Environment=PATH=/opt/collector/venv/bin:$PATH
+Environment=MONGO_LOG=/var/log/mongodb/mongod.log
+Environment=PYTHONPATH=/opt/collector/venv/lib/python3.8/site-packages:$PYTHONPATH
+ExecStart=/opt/collector/venv/bin/python /opt/collector/log_collector.py
+Restart=on-failure
+RestartSec=20s
+PIDFile=/var/run/log_collector.pid
+StandardOutput=file:/opt/collector/log_collector_run.log
+StandardError=file:/opt/collector/log_collector_error.log
+ExecStop=
+
+[Install]
+WantedBy=multi-user.target
